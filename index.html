@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste</title>
+</head>
+
+<body>
+    Hello world
+    <input type="file" id="audiofile">
+    <button id="oki">Send</button>
+    <script>
+        document.querySelector('#oki').addEventListener('click', async () => {
+            const fileInput = document.querySelector('#audiofile');
+            const formData = new FormData();
+            console.log('ok')
+            formData.append("audio", fileInput.files[0]); // "audio" precisa bater com upload.single("audio")
+
+            try {
+                const transcribeRes = await fetch("/transcribe", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const transcribeData = await transcribeRes.json();
+                console.log(transcribeData)
+                const requestRes = await fetch("/request", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(transcribeData) 
+                });
+
+                const requestData = await requestRes.json();
+                console.log(requestData);
+            } catch (err) {
+                console.error("Erro:", err);
+            }
+
+
+        })
+    </script>
+</body>
+
+</html>
