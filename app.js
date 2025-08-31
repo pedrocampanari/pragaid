@@ -98,6 +98,10 @@ app.post('/request', async (req, res) => {
     }
 });
 
+app.post('/', (req, res)=> {
+    console.log(req.body);
+})
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 })
